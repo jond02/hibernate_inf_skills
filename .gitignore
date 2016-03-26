@@ -1,2 +1,4 @@
 .idea/*
 hib-course.iml
+target/*
+src/main/resources/*
