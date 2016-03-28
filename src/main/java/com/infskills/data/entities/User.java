@@ -1,5 +1,7 @@
 package com.infskills.data.entities;
 
+import org.hibernate.annotations.Formula;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -9,38 +11,34 @@ import java.util.Date;
 
 @Entity
 @Table(name = "finances_user")
+@Access(value = AccessType.PROPERTY)
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID")
     private Long userId;
-
-    @Column(name = "FIRST_NAME")
     private String firstName;
-
-    @Column(name = "LAST_NAME")
     private String lastName;
-
-    @Column(name = "BIRTH_DATE")
     private Date birthDate;
-
-    @Column(name = "EMAIL_ADDRESS")
     private String emailAddress;
-
-    @Column(name = "LAST_UPDATED_DATE")
     private Date lastUpdateDate;
-
-    @Column(name = "LAST_UPDATED_BY")
     private String lastUpdateBy;
-
-    @Column(name = "CREATED_DATE")
     private Date createdDate;
-
-    @Column(name = "CREATED_BY")
     private String createdBy;
+    private boolean valid;
 
+    private int age;
 
+    @Transient //will not be auto imported into database
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //generate a value, database provides the value // FOR ORACLE: GenerationType.Sequence and @SequenceGenerator(name = "user_seq", sequenceName = "USER_ID_SEQ")
+    @Column(name = "USER_ID")
     public Long getUserId() {
         return userId;
     }
@@ -49,6 +47,7 @@ public class User {
         this.userId = userId;
     }
 
+    @Column(name = "FIRST_NAME")
     public String getFirstName() {
         return firstName;
     }
@@ -57,6 +56,7 @@ public class User {
         this.firstName = firstName;
     }
 
+    @Column(name = "LAST_NAME")
     public String getLastName() {
         return lastName;
     }
@@ -65,6 +65,9 @@ public class User {
         this.lastName = lastName;
     }
 
+    //@Basic - can provide same functionality as nullable
+    @Temporal(TemporalType.DATE)
+    @Column(name = "BIRTH_DATE", nullable = false)
     public Date getBirthDate() {
         return birthDate;
     }
@@ -73,6 +76,7 @@ public class User {
         this.birthDate = birthDate;
     }
 
+    @Column(name = "EMAIL_ADDRESS")
     public String getEmailAddress() {
         return emailAddress;
     }
@@ -81,6 +85,8 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "LAST_UPDATED_DATE")
     public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
@@ -89,6 +95,7 @@ public class User {
         this.lastUpdateDate = lastUpdateDate;
     }
 
+    @Column(name = "LAST_UPDATED_BY")
     public String getLastUpdateBy() {
         return lastUpdateBy;
     }
@@ -97,6 +104,8 @@ public class User {
         this.lastUpdateBy = lastUpdateBy;
     }
 
+    @Temporal(TemporalType.DATE)    //tell hibernate how we want to store and retrieve date/time
+    @Column(name = "CREATED_DATE", updatable = false) //updatable = false doesn't include in any secondary queries
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -105,6 +114,7 @@ public class User {
         this.createdDate = createdDate;
     }
 
+    @Column(name = "CREATED_BY", updatable = false)
     public String getCreatedBy() {
         return createdBy;
     }
@@ -113,5 +123,12 @@ public class User {
         this.createdBy = createdBy;
     }
 
+    @Formula("lower(datediff(curdate(), birth_date)/365)") //sql formuala - run select first to refresh persistence context
+    public int getAge() {
+        return age;
+    }
 
+    public void setAge(int age) {
+        this.age = age;
+    }
 }
