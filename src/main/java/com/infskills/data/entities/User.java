@@ -123,7 +123,7 @@ public class User {
         this.createdBy = createdBy;
     }
 
-    @Formula("lower(datediff(curdate(), birth_date)/365)") //sql formuala - run select first to refresh persistence context
+    @Formula("lower(datediff(curdate(), birth_date)/365)") //sql formula - run select first to refresh persistence context
     public int getAge() {
         return age;
     }
