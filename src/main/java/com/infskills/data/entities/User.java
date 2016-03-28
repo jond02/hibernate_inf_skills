@@ -8,7 +8,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name = "FINANCES_USER")
+@Table(name = "finances_user")
 public class User {
 
     @Id
@@ -102,7 +102,7 @@ public class User {
     }
 
     public void setCreatedDate(Date createdDate) {
-        createdDate = createdDate;
+        this.createdDate = createdDate;
     }
 
     public String getCreatedBy() {
