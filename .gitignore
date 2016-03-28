@@ -2,3 +2,4 @@
 hib-course.iml
 target/*
 src/main/resources/*
+!src/main/resources/log4j.properties
