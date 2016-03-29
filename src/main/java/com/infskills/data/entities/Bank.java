@@ -1,30 +1,56 @@
 package com.infskills.data.entities;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="bank")
+@Access(value = AccessType.FIELD)
 public class Bank {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="BANK_ID")
 	private Long bankId;
 
+	@Column(name="NAME")
 	private String name;
+	
+	@Embedded
+	private Address address = new Address();
 
-	private String addressLine1;
-
-	private String addressLine2;
-
-	private String city;
-
-	private String state;
-
-	private String zipCode;
-
+	@Column(name="IS_INTERNATIONAL")
+	private boolean international;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="LAST_UPDATED_DATE")
 	private Date lastUpdatedDate;
 
+	@Column(name="LAST_UPDATED_BY")
 	private String lastUpdatedBy;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="CREATED_DATE")
 	private Date createdDate;
 
+	@Column(name="CREATED_BY")
 	private String createdBy;
+
+	@ElementCollection
+	@CollectionTable(name = "bank_contact", joinColumns = @JoinColumn(name = "bank_id"))
+	@Column(name = "name")
+	private Collection<String> contacts = new ArrayList<>();
+
+	public Collection<String> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(String name) {
+		this.contacts.add(name);
+	}
 
 	public Long getBankId() {
 		return bankId;
@@ -43,43 +69,51 @@ public class Bank {
 	}
 
 	public String getAddressLine1() {
-		return addressLine1;
+		return address.getAddressLine1();
 	}
 
 	public void setAddressLine1(String addressLine1) {
-		this.addressLine1 = addressLine1;
+		this.address.setAddressLine1(addressLine1);
 	}
 
 	public String getAddressLine2() {
-		return addressLine2;
+		return address.getAddressLine2();
 	}
 
 	public void setAddressLine2(String addressLine2) {
-		this.addressLine2 = addressLine2;
+		this.address.setAddressLine2(addressLine2);
 	}
 
 	public String getCity() {
-		return city;
+		return address.getCity();
 	}
 
 	public void setCity(String city) {
-		this.city = city;
+		this.address.setCity(city);
 	}
 
 	public String getState() {
-		return state;
+		return address.getState();
 	}
 
 	public void setState(String state) {
-		this.state = state;
+		this.address.setState(state);
 	}
 
 	public String getZipCode() {
-		return zipCode;
+		return address.getZipCode();
 	}
 
 	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
+		this.address.setZipCode(zipCode);
+	}
+
+	public boolean isInternational() {
+		return international;
+	}
+
+	public void setInternational(boolean international) {
+		this.international = international;
 	}
 
 	public Date getLastUpdatedDate() {

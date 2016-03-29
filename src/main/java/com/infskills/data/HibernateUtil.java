@@ -1,5 +1,6 @@
 package com.infskills.data;
 
+import com.infskills.data.entities.Bank;
 import com.infskills.data.entities.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -16,7 +17,9 @@ public class HibernateUtil {
 
         try {
             Configuration configuration = new Configuration();
+            configuration.addAnnotatedClass(Bank.class);
             configuration.addAnnotatedClass(User.class);
+            configuration.addAnnotatedClass(Credential.class);
             return configuration.buildSessionFactory(new StandardServiceRegistryBuilder().build());
 
         } catch (Exception e) {
